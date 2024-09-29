@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+void dBoard(vector<char>& board) {
+    cout << " " << board[0] << " | " << board[1] << " | " << board[2] << endl;
+    cout << "---------" << endl;
+    cout << " " << board[3] << " | " << board[4] << " | " << board[5] << endl;
+    cout << "---------" << endl;
+    cout << " " << board[6] << " | " << board[7] << " | " << board[8] << endl;
+}
+bool winning(vector<char>& board, char player) {
+    int winning[][3] = {{0, 1, 2}, {3, 4, 5}, {6, 7, 8},
+                              {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
+                              {0, 4, 8}, {2, 4, 6}};
+    for (int i = 0; i < 8; i++) {
+        if (board[winning[i][0]] == board[winning[i][1]] &&
+            board[winning[i][1]] == board[winning[i][2]] &&
+            board[winning[i][2]] == player) {
+            return true;
+        }
+    }
+    return false;
+}
+bool checkingDraw(vector<char>& board) {
+    for (int i = 0; i < 9; i++) {
+        if (board[i] == ' ') {
+            return false;
+        }
+    }
+    return true;
+}
+void game() {
+    vector<char> board(9, ' ');
+    char currentPlayer = 'X';
+    while (true) {
+        dBoard(board);
+        int move;
+        cout << "Player " << currentPlayer << ", enter your move (1-9): ";
+        cin >> move;
+        if (move < 1 || move > 9 || board[move - 1] != ' ') {
+            cout << "Invalid move, try again." << endl;
+            continue;
+        }
+        board[move - 1] = currentPlayer;
+        if (winning(board, currentPlayer)) {
+            dBoard(board);
+            cout << "Player " << currentPlayer << " wins!" << endl;
+            break;
+        } else if (checkingDraw(board)) {
+            dBoard(board);
+            cout << "It's a draw!" << endl;
+            break;
+        }
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+}
+void playAgain() {
+    char play;
+    cout << "Play again? (y/n): ";
+    cin >> play;
+    if (play == 'y' || play == 'Y') {
+        game();
+    } else {
+        cout << "GOODBYE!!!!" << endl;
+    }
+}
+int main() {
+    game();
+    playAgain();
+    return 0;
+}
+
